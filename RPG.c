@@ -12,13 +12,24 @@ void equip();
 void map(); void mapft();
 void changeto();
 void commgen();
+void switchToWorld();
+void smart();
+
+/*MAP LOCATIONS*/
+void fazeloc();
+void opticsloc();
+void fnaticsloc();
+void nvsloc();
+
 
 
 /*GLOBAL VARIABLES*/
 //MAP DISCOVERYS
 int faze,optics, fnatics,nvs;  // These variables indicate if the place has been discovered or not
 int ftallow;  //Tells if fast travel is allowed or not like during combat
-int currentloc;
+int currentloc; //Gives the current location of the player
+int visitFaze, visitOptics, visitFnatics, visitNvs;
+
 
 //COMMAND LINE
 //Bettergets
@@ -85,19 +96,20 @@ void main()
     printf("********************************\n");
     printf("* DISCOVERED PHAZE CLAN HOLDOUT *\n");
     printf("********************************\n");
-    faze=0;
-    printf("Danks:\t Greg thinks you're the Chosen One. BS\n");
+    faze=1;
+    printf("Mico:\t Greg thinks you're the Chosen One. BS\n");
     printf("[1. What do you want big guy? \t 2. I think the same!");
     choose(&choice);
     switch(choice){
-        case 1: printf("Danks:\tDon't act tough, we all know who you are.\n");break;
-        case 2: printf("Danks:\tAtleast someone knows his stuff around. \n");break;
-        default: printf("Danks:\tYou picked the wrong house fool.\n");break;
+        case 1: printf("Mico:\tDon't act tough, we all know who you are.\n");break;
+        case 2: printf("Mico:\tAtleast someone knows his stuff around. \n");break;
+        default: printf("Mico:\tYou picked the wrong house fool.\n");break;
     }
-    printf("Danks:\t Greg wants me to show you around. \nDanks:\tHere, take this map. It'll help you in your journey. \n");
+    printf("Miko:\t Greg wants me to show you around. \nDanks:\tHere, take this map. It'll help you in your journey. \n");
     printf("*Map Added* \n");
-    printf("==\t To equip map, type switch and hit return/enter. Then type switchto map. \t==\n");
+    printf("==\t To equip map, type switch and hit return/enter. Then type map. \t==\n");
     currentloc=1;
+    ftallow=0;
     commgen();
 
 
@@ -111,6 +123,7 @@ int choose(int a)
     return a;
 }
 
+//COMMON COMMAND CENTRE
 void commgen()
 {
     int i;
@@ -119,34 +132,46 @@ void commgen()
     while(i==0){
     printf("COM:\t \t");
         bettergets(command);
-        if(strcmp(command,"switch")==0){changeto(); i++;break;}
-        if(strcmp(command,"ft")==0){mapft(); i++; break; }
+        if(strcasecmp(command,"switch")==0){changeto(); i++;break;}
+        if(strcasecmp(command,"ft")==0){mapft(); i++; break; }
 
         if(i==0){printf("Command not found \n"); continue;}
         }
 
 }
 
-
+//SWITCHING BETWEEN COMMANDS
 void changeto()
 {
         int i=0;
      char command[20];
      while(i==0){
-     printf("SWITCH: \t");
+     printf("SWITCH TO: \t");
         bettergets(command);
 
-        if(strcmp(command,"switchto World")==0) {/*world()*/printf("World is loaded \n"); i++;}
-        if(strcmp(command,"switchto map")==0) { map();i++;}
-        if(strcmp(command,"switchto weapons")==0) {/*weapons()*/printf("Weapons is loaded\n");; i++;}
-        if(strcmp(command,"switchto items")==0) { /*items()*/printf("Items is loaded\n");; i++;}
+        if(strcasecmp(command,"World")==0) {switchToWorld(); i++;}
+        if(strcasecmp(command,"map")==0) { map();i++;}
+        if(strcasecmp(command,"weapons")==0) {/*weapons()*/printf("Weapons is loaded\n");; i++;}
+        if(strcasecmp(command,"items")==0) { /*items()*/printf("Items is loaded\n");; i++;}
         if(strcasecmp(command, "COM")==0) commgen();
+        if(strcasecmp(command,"ft")==0)mapft();
         if(i==0) {printf("Invalid command\n"); continue;}
 
      }
 }
 
 
+/*MAP*/
+void switchToWorld(){
+    if(currentloc==1) fazeloc();
+    if(currentloc==2) opticsloc();
+    if(currentloc==3) fnaticsloc();
+    if(currentloc==4) nvsloc();
+
+}
+
+
+//DISPLAY CURRENT LOCATION AND MAP
 void map(){
 
     printf("\n\n.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:\n");
@@ -174,36 +199,104 @@ void map(){
     printf("*Phaze Clan Holdout \t [%c] [%c]\n*Team Hoptics Stronghold [%c] [%c] \n*Fanatics Stronghold \t [%c] [%c] \n*eNVieduS Holds \t [%c] [%c]  \n",(faze==1)?'O':'-',(currentloc==1)?'@':'-',(optics==1)?'O':'X',(currentloc==2)?'@':'-',(fnatics==1)?'O':'X',(currentloc==3)?'@':'-',(nvs==1)?'O':'X',(currentloc==4)?'@':'-');
     printf("== \t[X]: Not Travellable\t [O]: Travellable\t [@]: Current Location\n");
     printf("==\t To exit map, type switch and hit return/enter. then type switchto World \t==\n");
-    printf("==\t To fast travel, type ft and hit return/enter. then enter ft <holdout> \t==\n");
+    printf("==\t To fast travel, type ft and hit return/enter. then enter the whole name of the holdout \t==\n");
     commgen();
 
 
 }
 
+//FAST TRAVEL
 void mapft(){
-     int i=0;
+     int i=0,j=0;
      char command[20];
      while(i==0){
      printf("FAST TRAVEL: \t");
         bettergets(command);
 
-        if(strcmp(command,"ft phaze clan holdout")==0 && faze==1 && ftallow==1 && currentloc!=1) {printf("Travelling to Phaze Clan Holdout \n"); i++;}
-            else {printf("Fast travel not allowed or this place has not yet been discovered or you are now at this place.\n"); continue;}
-        if(strcmp(command,"team hoptics stronghold")==0 && optics==1 && ftallow==1 && currentloc!=2) { printf("Travelling to Team Hoptics Stronghold\n");i++;}
-             else {printf("Fast travel not allowed or this place has not yet been discovered or you are now at this place.\n"); continue;}
-        if(strcmp(command,"fanatics stronghold")==0 && fnatics==1 && ftallow==1 && currentloc!=3) {printf("Travelling to Fanatics Stronghold");; i++;}
-             else {printf("Fast travel not allowed or this place has not yet been discovered or you are now at this place.\n"); continue;}
-        if(strcmp(command,"enviedus holds")==0 && nvs==1 &&  ftallow==1 && currentloc!=4) { printf("Travelling to eNVieduS Holds");; i++;}
-             else {printf("Fast travel not allowed or this place has not yet been discovered or you are now at this place.\n"); continue;}
-        if(i==0) {printf("Invalid command\n"); continue;}
+        if(strcasecmp(command,"phaze clan holdout")==0 )
+           if(faze==1)
+                if(ftallow==1)
+                    if(currentloc!=1) {fazeloc(); i++;j++;}
+                    else {printf("You are currently here. \n"); continue;}
+                else {printf("You are not allowed to travel now.\n"); continue;}
+            else {printf("This place has not yet been discovered.\n"); continue;}
 
+
+
+        if(strcasecmp(command,"team hoptics stronghold")==0)
+            if(optics==1)
+                if(ftallow==1)
+                    if(currentloc!=2) {opticsloc();; i++;j++;}
+                    else {printf("You are currently here.\n"); continue;}
+                else {printf("You are not allowed to travel now.\n"); continue;}
+            else {printf("This place has not yet been discovered.\n"); continue;}
+
+
+        if(strcasecmp(command,"fanatics stronghold")==0)
+            if(fnatics==1)
+                if(ftallow==1)
+                    if(currentloc!=3) {fnaticsloc();; i++;j++;}
+                    else {printf("You are currently here.\n"); continue;}
+                else {printf("You are not allowed to travel now.\n"); continue;}
+            else {printf("This place has not yet been discovered.\n"); continue;}
+
+
+        if(strcasecmp(command,"enviedus holds")==0)
+            if(nvs==1)
+                if(ftallow==1)
+                    if(currentloc!=4) {nvsloc();; i++;j++;}
+                    else {printf("You are currently here.\n"); continue;}
+                else {printf("You are not allowed to travel now.\n"); continue;}
+            else {printf("This place has not yet been discovered.\n"); continue;}
+
+        else if(strcasecmp(command,"switch")==0){changeto();i++;}
+        else if(strcasecmp(command,"com")==0) {commgen();i++;}
+        else {printf("Invalid command\n"); continue;}
 
 
      }
 }
 
+/*MAP LOCATIONS*/
+void fazeloc(){
+    printf("Travelling to Phaze Clan Holdout \n");
+    if(visitFaze==0)
+    {
+        smart();
+    }
+}
+
+void opticsloc(){
+
+    printf("Travelling to Team Hoptivs Stronghold \n");
 
 
+}
+
+void fnaticsloc(){
+
+    printf("Travelling to Fanatics Stronghold \n");
+
+}
+
+void nvsloc(){
+
+    printf("Travelling to eNVieduS Holds \n");
+
+}
+
+void smart(){
+    char command[30];
+    printf("Miko: \tIt's time for testing out your skills. Head over to Dunkley to start.\n[Type OK to go to Dunkley.]\n");
+    while(i==0){
+    printf("YOU: \t");
+    gets(command);
+    if(strncmp(command,"ok",2)==0){ printf("Goes to Dunkley\n"); break;}
+    else {printf("Let me know if you change your mind\n"); continue;}
+    }
+
+
+}
 
 
 
