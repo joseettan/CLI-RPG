@@ -41,7 +41,7 @@ int btrgts=0;
 //USER ABILITIES
 
 int strength, reflex, intelligence, weaponsskills, stamina;
-int health;
+int health=100;
 
 
 
@@ -332,9 +332,6 @@ while(i==0)
     else if(choice==3)
     {
         res=combat(20,2,"Shadow");
-
-        printf("%d",res); //Debugging
-
         if(res==1){printf("YOU HAVE SLAIN AN ENEMY\n");break;}
         else {printf("YOU HAVE BEEN SLAIN. Fight Again\n");continue;}
 
@@ -346,9 +343,17 @@ while(i==0)
     printf("Mico:\t You really must be the Chosen One. \n");
     //If possible add a "hold standing system.
     printf("Mico:\t You should go to Hoptics and announce your arrival to the Island. I'll have a messenger sent ahead of you. \n");
+    printf("==\tType ok to continue\t==");
+    while(i==0){
+    printf("YOU: \t");
+    gets(command);
+    if(strncmp(command,"ok",2)==0){ break;}
+    else {printf("Let me know if you change your mind\n"); continue;}
+    }
     visitFaze++; //QUEST 1 COMPLETED
     ftallow=1;
     optics=1;
+    printf("Switch to your map, and travel to Hoptics\n");
     commgen();
     }
 }
