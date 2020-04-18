@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<conio.h>
 #include<strings.h>
+#include<time.h>
+#include<stdlib.h>
 
 //Functions I am going to define that I don't know of but there is probably a better way to do this
 char firstName();
@@ -14,6 +16,7 @@ void changeto();
 void commgen();
 void switchToWorld();
 void smart();
+int combat();
 
 /*MAP LOCATIONS*/
 void fazeloc();
@@ -35,8 +38,19 @@ int visitFaze, visitOptics, visitFnatics, visitNvs;
 //Bettergets
 int btrgts=0;
 
+//USER ABILITIES
+
+int strength, reflex, intelligence, weaponsskills, stamina;
+int health;
+
+
+
 void main()
 {
+    /*INITIALISING COMBAT RANDOM NUMBER GENERATOR*/
+                    srand(time(NULL));  //Just ignore this.
+    /* ******************************************/
+
     //Title screen
     printf("*********************************************************************************************************\n");
     printf("*\t\t\t\t\tTHE DUNGEONS CLI RPG \t\t\t\t\t\t*\n");
@@ -116,12 +130,18 @@ void main()
 
 
 }
-int choose(int a)
+/*CHOICE CHOOSER*/
+int choose(int *a)
 {
+
     printf("\n YOU:\t");
-    scanf("%d",a);
-    return a;
+    scanf("%d",&*a);
+
+    return *a;
+
 }
+
+
 
 //COMMON COMMAND CENTRE
 void commgen()
@@ -259,12 +279,89 @@ void mapft(){
 
 /*MAP LOCATIONS*/
 void fazeloc(){
-    printf("Travelling to Phaze Clan Holdout \n");
+    int i,res;
+    int choice;
+    if(currentloc!=1){
+    printf("Travelling to Phaze Clan Holdout \n");}
     if(visitFaze==0)
     {
         smart();
+        visitFaze++;
+    }
+    if(visitFaze==1) //QUEST 1
+    {
+        i=0;
+         puts("      _,.\n"
+"    ,` -.)\n"
+"   ( _/-\\\\-._\n"
+"  /,|`--._,-^|            ,\n"
+"  \\_| |`-._/||          ,'|\n"
+"    |  `-, / |         /  /\n"
+"    |     || |        /  /\n"
+"     `r-._||/   __   /  /\n"
+" __,-<_     )`-/  `./  /\n"
+"'  \\   `---'   \\   /  /\n"
+"    |           |./  /\n"
+"    /           //  /\n"
+"\\_/' \\         |/  /\n"
+" |    |   _,^-'/  /\n"
+" |    , ``  (\\/  /_\n"
+"  \\,.->._    \\X-=/^\n"
+"  (  /   `-._//^`\n"
+"   `Y-.____(__}\n"
+"    |     {__)\n"
+"          ()\n");
+printf("\nA new challenger approaches \n");
+printf("Ghost Knight: \t Bring me the chosen One. I will slay him and enchant my sword with his blood.\n");
+
+printf("[1.Use Speech (Intelligence)\t 2. RUN (requires Stamina) 3. FIGHT (COMBINATION OF ABILITIES)\n");
+while(i==0)
+{
+    choose(&choice);
+    if(choice==1)
+    {
+        if(intelligence>5){printf("GHOST KNIGHT: \tYour words cannot keep me off for a long time. But I must go now\n");intelligence++;break;}
+                                  else {printf("GHOST KNIGHT: \tYour words don't scare me.\n");intelligence++;continue;}
+    }
+    else if(choice==2)
+    {
+        if(stamina>5) {printf("GHOST KNIGHT: \tYou can run, but cannot hide for long. I will be back.\n");stamina++;break;}
+                                  else {printf("GHOST KNIGHT: \t(runs) Haha, fool you think you can run away from me?\n");stamina++;continue;}
+
+    }
+    else if(choice==3)
+    {
+        res=combat(20,2,"Shadow");
+
+        printf("%d",res); //Debugging
+
+        if(res==1){printf("YOU HAVE SLAIN AN ENEMY\n");break;}
+        else {printf("YOU HAVE BEEN SLAIN. Fight Again\n");continue;}
+
+
+    }
+    else {printf("you picked the wrong house fool."); continue;}
+    }
+    printf("Mico:\t This... This is impossible. The Ghost Knight never leaves without the head he came for. \n");
+    printf("Mico:\t You really must be the Chosen One. \n");
+    //If possible add a "hold standing system.
+    printf("Mico:\t You should go to Hoptics and announce your arrival to the Island. I'll have a messenger sent ahead of you. \n");
+    visitFaze++; //QUEST 1 COMPLETED
+    ftallow=1;
+    optics=1;
+    commgen();
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 void opticsloc(){
 
@@ -285,22 +382,77 @@ void nvsloc(){
 
 }
 
-void smart(){
-    char command[30];
+/*MAP LOCATIONS END*/
+
+/*SMART*/
+
+void smart(){ //Abilities of the player
+    int i=0,n;
+    char command[30],y[2];
     printf("Miko: \tIt's time for testing out your skills. Head over to Dunkley to start.\n[Type OK to go to Dunkley.]\n");
     while(i==0){
     printf("YOU: \t");
     gets(command);
-    if(strncmp(command,"ok",2)==0){ printf("Goes to Dunkley\n"); break;}
+    if(strncmp(command,"ok",2)==0){ printf("(Goes to Dunkley)\n\n"); break;}
     else {printf("Let me know if you change your mind\n"); continue;}
     }
+    printf("Dunkley:\t Ahh, the chosen one. You are here to put your abilities to the test. Let's start:\n \n");
+    printf("== Allocate points as to skills as required. You have a total of 20 points to spend. ==\n");
+    printf("== YOU CANNOT REALLOCATE THESE POINTS FURTHER DOWN THE GAME. ==\n");
+    printf("\nAbilities: STRENGTH, REFELEX, INTELLIGENCE, WEAPON SKILLS, STAMINA\n");
+
+    while(i==0){
+    n=20;
+    printf("Strength:\t [%d]/[20] \t",n); scanf("%d",&strength); n=n-strength;
+    printf("Reflex:  \t [%d]/[20] \t",n); scanf("%d",&reflex); n=n-reflex;
+    printf("Intelligence:\t [%d]/[20] \t",n); scanf("%d",&intelligence ); n=n-intelligence;
+    printf("Weapon Skills:\t [%d]/[20] \t",n); scanf("%d",&weaponsskills); n=n-weaponsskills;
+    printf("Stamina:\t [%d]/[20] \t",n); scanf("%d",&stamina); n=n-stamina;
+
+    if(n<0)
+        {printf("You have used up more points. Reallocate. \n");continue;}
+    else if(n>0){printf("You have points remaining to allocate. Reallocate \n");continue;}
+    else if(n==0){
+            printf("Allocation complete. Do you want to reallocate? (y/n) \n");
+            scanf("%s",y);
+            if(strcasecmp(y,"y")==0) continue;
+            else {printf("Abilities are increased based on your use. Use an ability more to level it up.\n"); break;}
+            }
+    }
+}
+
+/*COMBAT*/
+int combat(int enemyHealth,int difficulty,char name[30])
+{
+    int combresult;
+    int i=0;
+    while(i==0){
+    if(health==0) break;
+    if(enemyHealth==0) break;
+    int r = rand()%5+1;
+    switch(r){
+    case 1: {printf("%s used Slash damaging %d health \n\n",name,3*difficulty);health=health-(3*difficulty); break;}
+    case 2: {printf("%s used Puncture damaging %d health \n\n",name,2*difficulty);health=health-(2*difficulty);break;}
+    case 3: {printf("%s used Magic damaging %d health \n\n",name,1*difficulty);health=health-(1*difficulty);break;}
+    case 4: {printf("%s used Special Move damaging %d health \n \n",name,6*difficulty);health=health-(6*difficulty);break;}
+    case 5: {printf("%s attacked and missed \n \n",name);break;}
+    }
+
+    printf("Your Health [%d]\t %s Health [%d] \n",health,name,enemyHealth);
+    i=1;
+    combresult=1; //debugging
+    return combresult;
 
 
+
+    }
 }
 
 
 
-/*FUNCTIONS I WROTE BECAUSE I DONT KNOW ANY PRE-DEFINED FUNCTIONS AND PROBABLY COULD BE DONE IN A BETTER WAY*/
+
+
+/*FUNCTIONS I WROTE BECAUSE I DONT KNOW ANY PRE-DEFINED FUNCTIONS AND THESE COULD PROBABLY BE DONE IN BETTER WAYS*/
 char firstName(char a[30],char b[30]) //for extracting first name from full name entered first
 {
     int i;
