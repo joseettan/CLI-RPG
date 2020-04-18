@@ -281,6 +281,7 @@ void mapft(){
 void fazeloc(){
     int i,res;
     int choice;
+    char command[30];
     if(currentloc!=1){
     printf("Travelling to Phaze Clan Holdout \n");}
     if(visitFaze==0)
@@ -343,7 +344,7 @@ while(i==0)
     printf("Mico:\t You really must be the Chosen One. \n");
     //If possible add a "hold standing system.
     printf("Mico:\t You should go to Hoptics and announce your arrival to the Island. I'll have a messenger sent ahead of you. \n");
-    printf("==\tType ok to continue\t==");
+    printf("==\tType ok to continue\t==\n");
     while(i==0){
     printf("YOU: \t");
     gets(command);
@@ -427,6 +428,7 @@ void smart(){ //Abilities of the player
 }
 
 /*COMBAT*/
+//Continue here, start working on a player attack system;
 int combat(int enemyHealth,int difficulty,char name[30])
 {
     int combresult;
