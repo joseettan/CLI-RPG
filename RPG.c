@@ -16,7 +16,10 @@ void changeto();
 void commgen();
 void switchToWorld();
 void smart();
+int combatsystems();
 int combat();
+void enemyCombat();
+void playerCombat();
 
 /*MAP LOCATIONS*/
 void fazeloc();
@@ -39,10 +42,14 @@ int visitFaze, visitOptics, visitFnatics, visitNvs;
 int btrgts=0;
 
 //USER ABILITIES
-
+char namePlayer[30], fname[30];
 int strength, reflex, intelligence, weaponsskills, stamina;
 int health=100;
 
+//ENEMY ABILITIES
+char enemyName[30];
+int enemyHealth;
+int difficulty;
 
 
 void main()
@@ -63,7 +70,7 @@ void main()
 
     int choice;
     int age;
-    char namePlayer[30], fname[30];
+
 
     scanf("%[^\n]s",namePlayer);
     firstName(namePlayer,fname);
@@ -332,7 +339,7 @@ while(i==0)
     }
     else if(choice==3)
     {
-        res=combat(20,2,"Shadow");
+        res=combatsystems(20,2,"Shadow Knight");
         if(res==1){printf("YOU HAVE SLAIN AN ENEMY\n");break;}
         else {printf("YOU HAVE BEEN SLAIN. Fight Again\n");continue;}
 
@@ -428,32 +435,114 @@ void smart(){ //Abilities of the player
 }
 
 /*COMBAT*/
-//Continue here, start working on a player attack system;
-int combat(int enemyHealth,int difficulty,char name[30])
+int combatsystems(int opponentHealth,int currentdifficulty,char currentenemyname[30]) //changes enemy abilities
+{
+    int res;
+    enemyHealth=opponentHealth;
+    difficulty=currentdifficulty;
+    strcpy(enemyName, currentenemyname);
+    if(enemyHealth!=0 || health!=0)
+        res=combat();
+    return res;
+
+}
+
+int combat()
 {
     int combresult;
     int i=0;
     while(i==0){
-    if(health==0) break;
-    if(enemyHealth==0) break;
+    printf("Your Health [%d]\t Stamina [%d] \t x \t %s Health [%d] \n \n",health,stamina,enemyName,enemyHealth);
+    if(health<=0) {combresult=0; break;}
+    if(enemyHealth<=0) {combresult=1; break;}
     int r = rand()%5+1;
-    switch(r){
-    case 1: {printf("%s used Slash damaging %d health \n\n",name,3*difficulty);health=health-(3*difficulty); break;}
-    case 2: {printf("%s used Puncture damaging %d health \n\n",name,2*difficulty);health=health-(2*difficulty);break;}
-    case 3: {printf("%s used Magic damaging %d health \n\n",name,1*difficulty);health=health-(1*difficulty);break;}
-    case 4: {printf("%s used Special Move damaging %d health \n \n",name,6*difficulty);health=health-(6*difficulty);break;}
-    case 5: {printf("%s attacked and missed \n \n",name);break;}
+    enemyCombat(&r);
+
     }
 
-    printf("Your Health [%d]\t %s Health [%d] \n",health,name,enemyHealth);
-    i=1;
-    combresult=1; //debugging
     return combresult;
 
+}
 
+
+void enemyCombat(int *r)
+{
+    int imp=rand()%5+1; //imp or impact helps to randomize and fine adjust the damages to a certain level while difficulty is a coarse adjustment to damaage.
+    switch(*r){
+    case 1: {printf("%s used Slash damaging %d health \n\n",enemyName,imp*difficulty);health=health-(imp*difficulty); break;}
+    case 2: {printf("%s used Puncture damaging %d health \n\n",enemyName,imp*difficulty);health=health-(imp*difficulty);break;}
+    case 3: {printf("%s used Magic damaging %d health \n\n",enemyName,imp*difficulty);health=health-(imp*difficulty);break;}
+    case 4: {printf("%s used Special Move damaging %d health \n \n",enemyName,(imp+2)*difficulty);health=health-((imp+2)*difficulty);break;}
+    case 5: {printf("%s attacked and missed \n \n",enemyName);break;}
+    }
+    printf("Your Health [%d]\t Stamina [%d] \t x \t %s Health [%d] \n \n",health,stamina,enemyName,enemyHealth);
+    playerCombat();
+}
+
+
+void playerCombat(){
+if(stamina!=0){
+    int r, enemyPossibility, choice; //r is enemy's choice. enemypossibility is possibility of next to be missed  by the enemy
+    int playerPossibility=rand()%10; //possibility of player missing next attack, a factor of 10 provides a fair possibility with range.
+
+int imp = rand() % 5 + 1; //imp or impact helps to randomize and fine adjust the damages to a certain level while skills do the coarse adjustment
+printf("[1. Slash \t 2. Punch \t 3. Kick \t 4. Special Move \t 5. Defend (Conserves Stamina)]\n");
+printf("%d",imp);
+choose(&choice);
+if(playerPossibility>3) //so player can miss only few times
+{
+switch (choice) {
+case 1:
+  {
+    printf("You used Slash damaging %d %s 's health \n\n", (strength + (weaponsskills * (stamina / imp)) * (imp / difficulty), enemyName)); enemyHealth = enemyHealth - (strength + (weaponsskills * (stamina / imp)) * (imp / difficulty));
+      stamina--;
+      break;
+    }
+    case 2: {
+      printf("You used Punch damaging %d %s 's health \n\n", ((strength + stamina) * (imp / difficulty)), enemyName);enemyHealth = enemyHealth - ((strength + stamina) * (imp / difficulty));
+      stamina--;
+      break;
+    }
+    case 3: {
+      printf("You used Kick damaging %d %s 's health \n\n", (((1+imp) * strength * stamina / imp ) * ((imp+2) / difficulty)), enemyName); enemyHealth = enemyHealth - ((1+imp) * strength * stamina / imp ) * ((imp+2) / difficulty);
+      stamina--;
+      break;
+    }
+    case 4: {
+      printf("You used Special Move damaging %d %s 's health \n\n", (((3*imp) * strength * stamina / (imp)) * ((imp+1) / difficulty)), enemyName);enemyHealth = enemyHealth - (((3*imp) * strength * stamina / (imp)) * ((imp+1) / difficulty));
+      stamina--;
+      break;
+    }
+    case 5: {
+      printf("You are defending \n");
+      enemyPossibility = rand() % 5;
+      if (enemyPossibility >=2) { //so enemy can miss more times while defending
+        r = 5;
+        enemyCombat( & r);
+      } else combat();
+    }
+    default: {
+      printf("Invalid Attack.\n");playerCombat();
+    }
+  } //End of switch stmnt
+  combat();
+}
+else{
+        printf("You are out of stamina, you'll have to sit out this move \n");
+        stamina++;
+        combat();
 
     }
 }
+else { printf("You missed. \n \n");combat();}
+}
+
+
+
+
+
+
+
 
 
 
