@@ -20,10 +20,11 @@ int combatsystems();
 int combat();
 void enemyCombat();
 void playerCombat();
+int weapondamage;
 
 /*MAP LOCATIONS*/
 void fazeloc();
-void opticsloc();
+void opticloc();
 void fnaticsloc();
 void nvsloc();
 
@@ -31,10 +32,10 @@ void nvsloc();
 
 /*GLOBAL VARIABLES*/
 //MAP DISCOVERYS
-int faze,optics, fnatics,nvs;  // These variables indicate if the place has been discovered or not
+int faze,optic, fnatics,nvs;  // These variables indicate if the place has been discovered or not
 int ftallow;  //Tells if fast travel is allowed or not like during combat
 int currentloc; //Gives the current location of the player
-int visitFaze, visitOptics, visitFnatics, visitNvs;
+int visitFaze, visitOptic, visitFnatics, visitNvs;
 
 
 //COMMAND LINE
@@ -43,8 +44,10 @@ int btrgts=0;
 
 //USER ABILITIES
 char namePlayer[30], fname[30];
-int strength, reflex, intelligence, weaponsskills, stamina;
+int strength, armor, intelligence, weaponsskills, stamina;
 int health=100;
+int weaponequipped=0; //weaponequipped, swords- 1-5, bows 6-10, great swords 10-12, spears 13-15, staffs 15-20
+
 
 //ENEMY ABILITIES
 char enemyName[30];
@@ -60,7 +63,8 @@ void main()
 
     //Title screen
     printf("*********************************************************************************************************\n");
-    printf("*\t\t\t\t\tTHE DUNGEONS CLI RPG \t\t\t\t\t\t*\n");
+    puts("*\t\t\tTHE MLG ISLANDS: 420 360 NOSCOPE HEADSHOT \t\t\t\t\t*\n"
+           "*\t\t\t\tA CLI RPG \t\t\t\t\t\t\t\t*");
     printf("*********************************************************************************************************\n");
 
     //Character Creation
@@ -191,7 +195,7 @@ void changeto()
 /*MAP*/
 void switchToWorld(){
     if(currentloc==1) fazeloc();
-    if(currentloc==2) opticsloc();
+    if(currentloc==2) opticloc();
     if(currentloc==3) fnaticsloc();
     if(currentloc==4) nvsloc();
 
@@ -216,14 +220,14 @@ void map(){
 "    *		      !   \\__/*			\\\n"
 "  .*		      !			    ..~-*\n"
 "  |		       `\\	eNVieduS    !\n"
-"   *	 HOPTICS	/		    |\n"
+"   *	 HOPTIC 	/		    |\n"
 "     *		       /	    .~``*-.*'\n"
 "	*	      /		_.-`\n"
 "	  *-__.____.-*\\._.----~  \n");
     printf("\n");
 
 
-    printf("*Phaze Clan Holdout \t [%c] [%c]\n*Team Hoptics Stronghold [%c] [%c] \n*Fanatics Stronghold \t [%c] [%c] \n*eNVieduS Holds \t [%c] [%c]  \n",(faze==1)?'O':'-',(currentloc==1)?'@':'-',(optics==1)?'O':'X',(currentloc==2)?'@':'-',(fnatics==1)?'O':'X',(currentloc==3)?'@':'-',(nvs==1)?'O':'X',(currentloc==4)?'@':'-');
+    printf("*Phaze Clan Holdout \t [%c] [%c]\n*HopTic Stronghold [%c] [%c] \n*Fanatics Stronghold \t [%c] [%c] \n*eNVieduS Holds \t [%c] [%c]  \n",(faze==1)?'O':'-',(currentloc==1)?'@':'-',(optic==1)?'O':'X',(currentloc==2)?'@':'-',(fnatics==1)?'O':'X',(currentloc==3)?'@':'-',(nvs==1)?'O':'X',(currentloc==4)?'@':'-');
     printf("== \t[X]: Not Travellable\t [O]: Travellable\t [@]: Current Location\n");
     printf("==\t To exit map, type switch and hit return/enter. then type switchto World \t==\n");
     printf("==\t To fast travel, type ft and hit return/enter. then enter the whole name of the holdout \t==\n");
@@ -250,10 +254,10 @@ void mapft(){
 
 
 
-        if(strcasecmp(command,"team hoptics stronghold")==0)
-            if(optics==1)
+        if(strcasecmp(command,"HopTic stronghold")==0)
+            if(optic==1)
                 if(ftallow==1)
-                    if(currentloc!=2) {opticsloc();; i++;j++;}
+                    if(currentloc!=2) {opticloc(); i++;j++;}
                     else {printf("You are currently here.\n"); continue;}
                 else {printf("You are not allowed to travel now.\n"); continue;}
             else {printf("This place has not yet been discovered.\n"); continue;}
@@ -262,7 +266,7 @@ void mapft(){
         if(strcasecmp(command,"fanatics stronghold")==0)
             if(fnatics==1)
                 if(ftallow==1)
-                    if(currentloc!=3) {fnaticsloc();; i++;j++;}
+                    if(currentloc!=3) {fnaticsloc(); i++;j++;}
                     else {printf("You are currently here.\n"); continue;}
                 else {printf("You are not allowed to travel now.\n"); continue;}
             else {printf("This place has not yet been discovered.\n"); continue;}
@@ -271,7 +275,7 @@ void mapft(){
         if(strcasecmp(command,"enviedus holds")==0)
             if(nvs==1)
                 if(ftallow==1)
-                    if(currentloc!=4) {nvsloc();; i++;j++;}
+                    if(currentloc!=4) {nvsloc(); i++;j++;}
                     else {printf("You are currently here.\n"); continue;}
                 else {printf("You are not allowed to travel now.\n"); continue;}
             else {printf("This place has not yet been discovered.\n"); continue;}
@@ -350,7 +354,7 @@ while(i==0)
     printf("Mico:\t This... This is impossible. The Ghost Knight never leaves without the head he came for. \n");
     printf("Mico:\t You really must be the Chosen One. \n");
     //If possible add a "hold standing system.
-    printf("Mico:\t You should go to Hoptics and announce your arrival to the Island. I'll have a messenger sent ahead of you. \n");
+    printf("Mico:\t You should go to HopTic and announce your arrival to the Island. I'll have a messenger sent ahead of you. \n");
     printf("==\tType ok to continue\t==\n");
     while(i==0){
     printf("YOU: \t");
@@ -360,8 +364,8 @@ while(i==0)
     }
     visitFaze++; //QUEST 1 COMPLETED
     ftallow=1;
-    optics=1;
-    printf("Switch to your map, and travel to Hoptics\n");
+    optic=1;
+    printf("Switch to your map, and travel to HopTic\n");
     commgen();
     }
 }
@@ -376,7 +380,7 @@ while(i==0)
 
 
 
-void opticsloc(){
+void opticloc(){
 
     printf("Travelling to Team Hoptivs Stronghold \n");
 
@@ -417,7 +421,7 @@ void smart(){ //Abilities of the player
     while(i==0){
     n=20;
     printf("Strength:\t [%d]/[20] \t",n); scanf("%d",&strength); n=n-strength;
-    printf("Reflex:  \t [%d]/[20] \t",n); scanf("%d",&reflex); n=n-reflex;
+    printf("Armor:  \t [%d]/[20] \t",n); scanf("%d",&armor); n=n-armor;
     printf("Intelligence:\t [%d]/[20] \t",n); scanf("%d",&intelligence ); n=n-intelligence;
     printf("Weapon Skills:\t [%d]/[20] \t",n); scanf("%d",&weaponsskills); n=n-weaponsskills;
     printf("Stamina:\t [%d]/[20] \t",n); scanf("%d",&stamina); n=n-stamina;
@@ -487,17 +491,22 @@ if(stamina!=0){
 
 int imp = rand() % 5 + 1; //imp or impact helps to randomize and fine adjust the damages to a certain level while skills do the coarse adjustment
 printf("[1. Slash \t 2. Punch \t 3. Kick \t 4. Special Move \t 5. Defend (Conserves Stamina)]\n");
-printf("%d",imp);
+
 choose(&choice);
 if(playerPossibility>3) //so player can miss only few times
 {
 switch (choice) {
 case 1:
   {
-    printf("You used Slash damaging %d %s 's health \n\n", (strength + (weaponsskills * (stamina / imp)) * (imp / difficulty), enemyName)); enemyHealth = enemyHealth - (strength + (weaponsskills * (stamina / imp)) * (imp / difficulty));
+    if(weaponequipped!=0){
+    printf("You used Slash damaging %d %s 's health \n\n", (strength*(stamina / imp) + (weaponsskills * weapondamage ) * (imp / difficulty)), enemyName); enemyHealth = enemyHealth - (strength*(stamina / imp) + (weaponsskills * weapondamage ) * (imp / difficulty));
       stamina--;
       break;
     }
+    else printf("You do not have a weapon equipped, Try another attack \n");
+    playerCombat();
+    break;
+  }
     case 2: {
       printf("You used Punch damaging %d %s 's health \n\n", ((strength + stamina) * (imp / difficulty)), enemyName);enemyHealth = enemyHealth - ((strength + stamina) * (imp / difficulty));
       stamina--;
@@ -515,7 +524,7 @@ case 1:
     }
     case 5: {
       printf("You are defending \n");
-      enemyPossibility = rand() % 5;
+      enemyPossibility = rand() % 5+((armor%4)/difficulty); //+(armor%4)/difficulty gives more probability of the enemy missing when armor is sufficiently high.
       if (enemyPossibility >=2) { //so enemy can miss more times while defending
         r = 5;
         enemyCombat( & r);
@@ -526,16 +535,18 @@ case 1:
     }
   } //End of switch stmnt
   combat();
-}
-else{
+}   //Possibility if end
+else { printf("You missed. \n \n");combat();} //Possibility if else
+
+}   //Stamina if end
+else{   //Stamina if else
         printf("You are out of stamina, you'll have to sit out this move \n");
         stamina++;
         combat();
 
     }
 }
-else { printf("You missed. \n \n");combat();}
-}
+
 
 
 
