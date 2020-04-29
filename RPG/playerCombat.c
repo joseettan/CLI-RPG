@@ -12,7 +12,7 @@ if(stamina!=0){
 int imp = rand() % 5 + 1; //imp or impact helps to randomize and fine adjust the damages to a certain level while skills do the coarse adjustment
 printf("[1. Slash \t 2. Punch \t 3. Kick \t 4. Special Move \t 5. Defend (Conserves Stamina)]\n");
 
-choose(&choice);
+choose(&choice,5);
 if(playerPossibility>3) //so player can miss only few times
 {
 switch (choice) {

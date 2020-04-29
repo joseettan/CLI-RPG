@@ -55,7 +55,7 @@ int main()
     printf("[1. I don't know \t 2. Why do you care old man \t 3. I lost my way over here] \n\n");
     printf("== \tWhen '[ ]' is displayed, a choice can be made. Simply enter the number corresponding to the choice. \t== \n");
 
-    choose(&choice);
+    choose(&choice,3);
     switch(choice){
         case 1:printf("\n\nSTRANGER: You must've lost your memories under the Tree of Thousand Blossoms\n\n");break;
         case 2:printf("\n\nSTRANGER: How rude of you to say that to the man that just saved your life?\n\n");break;
@@ -68,7 +68,7 @@ int main()
     printf("\n\nSTRANGER: (laughing) You surely don't look %d. You seem to have really lost your memories. \n\n",age);
     printf("STRANGER: But that could only happen to the Chosen One. Could it be? But the legends?! \n\n ");
     printf("[1. Let's get outta here Mastuhchief \t 2. I am the Chosen One \t 3. What are you talking about]\n\n");
-    choose(&choice);
+    choose(&choice,3);
     switch(choice){
         case 1:printf("STRANGER: Ah.. I see you are a man of culture as well \n\n");break;
         case 2:printf("STRANGER: But for someone like you to be the One! How can it be? \n\n");break;
@@ -79,7 +79,7 @@ int main()
     printf("\n\nSTRANGER: Your journey begins traveller, you've chosen the path. \n \n\nSTRANGER: Oh how rude of me to not introduce myself. I'm Greg Kelsoe. \n\tI am the chief of this tribe.");
     printf("\n\nGREG: I think that's all you need to know now. \n You seem to be healed, head on out Chosen One \n\n");
     printf("[1. Head Out \t 2. What does it mean to be the Chosen One? \t 3. This is BS, I'm getting outta here!] \n\n");
-    choose(&choice);
+    choose(&choice,3);
      switch(choice){
         case 1:printf("\n\n*Heads out*\n\n \n");break;
         case 2:printf("\n\nGreg:\tOh why, it means everything. \n The ability to change whatever he wanted, to remake the World as you see fit. \n To dodge bullets, oh wait, bullets aren't a thing yet. Oh well. \n \n (heads out)\n\n");break;
@@ -89,7 +89,7 @@ int main()
         //MAIN GAME STARTS
 
         char command[20];
-        int i=0;
+
 
     printf("\n\n\n\n********************************\n");
     printf("* DISCOVERED PHAZE CLAN HOLDOUT *\n");
@@ -97,7 +97,7 @@ int main()
     faze=1;
     printf("Miko:\t Greg thinks you're the Chosen One. BS\n\n");
     printf("[1. What do you want big guy? \t 2. I think the same!\n");
-    choose(&choice);
+    choose(&choice,2);
     switch(choice){
         case 1: printf("\n\nMiko:\tDon't act tough, we all know who you are.\n\n");break;
         case 2: printf("\n\nMiko:\tAtleast someone knows his stuff around. \n\n");break;

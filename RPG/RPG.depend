@@ -13,7 +13,7 @@
 1587997802 source:e:\sampleprograms\cprograms\rpg\combat.c
 	"header.h"
 
-1587997744 source:e:\sampleprograms\cprograms\rpg\combatsystems.c
+1588000045 source:e:\sampleprograms\cprograms\rpg\combatsystems.c
 	"header.h"
 
 1587997287 source:e:\sampleprograms\cprograms\rpg\commandcenter.c
@@ -40,7 +40,7 @@
 1587997434 source:e:\sampleprograms\cprograms\rpg\phaze.c
 	"header.h"
 
-1587998078 source:e:\sampleprograms\cprograms\rpg\playercombat.c
+1588133658 source:e:\sampleprograms\cprograms\rpg\playercombat.c
 	"header.h"
 
 1587997673 source:e:\sampleprograms\cprograms\rpg\smart.c
@@ -49,7 +49,7 @@
 1587998261 source:e:\sampleprograms\cprograms\rpg\switch.c
 	"header.h"
 
-1587999968 source:e:\sampleprograms\cprograms\rpg\main.c
+1588133690 source:e:\sampleprograms\cprograms\rpg\main.c
 	"header.h"
 
 1587999999 source:e:\sampleprograms\cprograms\rpg\weapondamage.c
