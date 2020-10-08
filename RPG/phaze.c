@@ -82,6 +82,7 @@ while(i==0)
     optic=1;
     printf("\n\n\nSwitch to your map, and travel to HopTic\n");
     commgen();
+    visitOptic==1;
     }
 }
 
