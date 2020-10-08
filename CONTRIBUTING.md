@@ -1,4 +1,4 @@
-# CLI RPG
+# CLI RPG HACKTOBER FEST
 An RPG game on a terminal. 
 
 **YOU MIGHT NEED CODEBLOCKS**
@@ -14,4 +14,4 @@ Things I'd want a helping hand with:
 * If possible, find a new way to handle quests
 
 
-Happy coding ❤
+Happy Hacktoberfest ❤
