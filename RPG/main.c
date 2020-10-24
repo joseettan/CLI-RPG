@@ -51,7 +51,7 @@ int main()
 
     scanf("%[^\n]s",namePlayer);
     firstName(namePlayer,fname);
-    printf("\n\nSTRANGER: %s, Why have you come to this cursed lands?\n\n",fname);
+    printf("\n\nSTRANGER: %s, Why man WHY have you come to this cursed lands?\n\n",fname);
     printf("[1. I don't know \t 2. Why do you care old man \t 3. I lost my way over here] \n\n");
     printf("== \tWhen '[ ]' is displayed, a choice can be made. Simply enter the number corresponding to the choice. \t== \n");
 
@@ -92,7 +92,7 @@ int main()
 
 
     printf("\n\n\n\n********************************\n");
-    printf("* DISCOVERED PHAZE CLAN HOLDOUT *\n");
+    printf("* Huray! DISCOVERED PHAZE CLAN HOLDOUT *\n");
     printf("********************************\n\n\n\n\n");
     faze=1;
     printf("Miko:\t Greg thinks you're the Chosen One. BS\n\n");
