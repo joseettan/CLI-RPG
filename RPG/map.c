@@ -43,6 +43,7 @@ void displayMap(){
 
 
 }
+// this game is awesome i liked it.
 
 //FAST TRAVEL
 void mapft(){
