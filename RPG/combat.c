@@ -1,7 +1,7 @@
 #include "header.h"
 
 //This checks for combat results and prints health and stamina of both enemy and the player
-
+//bug . The combat ability chooser displays negative health if the user has typed in more than the amount is given.
 int combat()
 {
     int combresult;
